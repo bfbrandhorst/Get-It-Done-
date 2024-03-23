@@ -60,6 +60,24 @@ function renderTaskList() {
     })
 
 }
+document.addEventListener('DOMContentLoaded', function () {
+    const todo = document.querySelector('#todo-cards');
+    const inProgress = document.querySelector('#in-progress-cards');
+    const done = document.querySelector('#done-cards');
+    const taskCards = [todo, inProgress, done];
+    const taskCardEl = document.querySelectorAll(taskCards);
+    taskCardEl.forEach(taskCards => {
+        taskCards.addEventListener('dragstart', dragStart);
+        taskCards.addEventListener('dragend', dragEnd);
+    });
+
+    function dragStart(event) {
+        event.target.classList.add('dragging');
+    }
+    function dragEnd(event) {
+        event.target.classList.remove('dragging');
+    }
+})
 
 // Todo: create a function to handle adding a new task
 function handleAddTask(event) {
@@ -100,4 +118,5 @@ function handleDrop(event, ui) {
 // Todo: when the page loads, render the task list, add event listeners, make lanes droppable, and make the due date field a date picker
 $(document).ready(function () {
     $("#saveTask").on("click", handleAddTask)
+    renderTaskList()
 });
