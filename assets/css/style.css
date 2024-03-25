@@ -25,3 +25,9 @@ body {
 .late {
     background-color: red;
 }
+
+.delete-button {
+    background-color: red;
+    color: white;
+    border-radius: 8px;
+}
