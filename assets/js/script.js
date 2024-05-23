@@ -28,7 +28,9 @@ function createTaskCard(task) {
             dateClass = "late"
         }
 
-        const taskCard = document.createElement('div'); taskCard.classList.add("task-card");
+        
+        const taskCard = document.createElement('div'); taskCard.classList.add('task-card' ,`${dateClass}` );
+       //taskCard.id = task[i].id
         const titleElement = document.createElement('h3'); titleElement.textContent = task[i].title;
         const descriptionElement = document.createElement('p'); descriptionElement.textContent = task[i].description;
         const dateElement = document.createElement('p'); dateElement.textContent = task[i].date;
@@ -104,9 +106,18 @@ function handleDeleteTask(event) {
 // Todo: create a function to handle dropping a task into a new status lane
 function handleDrop(event, ui) {
     event.preventDefault();
-    var data = event.dataTransfer.getData("text");
-    var draggedElement = document.getElementById(data);
-    event.target.appendChild(draggedElement);
+    const cardID=ui.draggable.attr('id')
+    const newLane = $(this).attr('id')
+    const startingCardPoint = $(`#${cardID}`)
+    $(this).append(startingCardPoint)
+
+
+    const tasks = taskList.find(task => task.id === cardID)
+    if(tasks){
+        tasks.lane = newLane
+        localStorage.setItem('tasks', JSON.stringify(tasks))
+        document.location.reload()
+    }
 
 }
 
@@ -116,6 +127,11 @@ $(document).ready(function () {
     $("#saveTask").on("click", handleAddTask)
     renderTaskList()
 });
+
+$('.task-card').draggable({
+    revert:'invalid',
+    contaiment: 'document',
+})
 
 //  Make lanes droppable
 $('.lane').droppable({
